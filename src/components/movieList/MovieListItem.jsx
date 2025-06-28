@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Modal from "components/Modal";
 import { capitalize } from "neetocist";
 import { Button, Typography } from "neetoui";
+import useMovieStore from "stores/useMovieStore";
 
 import MoviePoster from "./MoviePoster";
 
@@ -20,8 +21,10 @@ const MovieListItem = ({
   //   moviePoster,
   //   year,
   // });
+  const addToHistory = useMovieStore(store => store.addToHistory);
   const handleOnClose = () => {
     setIsModalVisible(false);
+    addToHistory({ imdbID, movieTitle });
   };
 
   return (

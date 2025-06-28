@@ -20,7 +20,7 @@ const MovieList = () => {
     s: debouncedSearchKey,
   };
 
-  const { data: movieList } = useQuery({
+  const { data: { Search: movieList = [] } = { Search: [] } } = useQuery({
     queryKey: ["movieList", params.s],
     queryFn: () => movieApi.fetchMovie(params),
     enabled: !!debouncedSearchKey,
@@ -46,7 +46,7 @@ const MovieList = () => {
       />
       <div className="m-16 grid justify-items-center gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {isNotNil(debouncedSearchKey) &&
-          movieList?.Search.map(({ Title, Poster, Year, imdbID, Type }) => (
+          movieList?.map(({ Title, Poster, Year, imdbID, Type }) => (
             <MovieListItem
               imdbID={imdbID}
               key={imdbID}

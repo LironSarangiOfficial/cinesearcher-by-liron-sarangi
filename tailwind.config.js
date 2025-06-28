@@ -16,7 +16,13 @@ module.exports = {
         },
         main: {
           primary: "#f5f5f5",
-        }
+        },
+        history: {
+          item:{
+            inactive: "#E4E4F8",
+            active: "#2f62ff",
+          }
+        },
       }
     },
   },

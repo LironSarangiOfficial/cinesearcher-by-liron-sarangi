@@ -1,12 +1,29 @@
-// import { create } from "zustand";
-// import { persist } from "zustand/middleware";
+import { existsBy } from "neetocist";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-// const useMovieStore = create(
-//   persist(
-//     set => ({
+const useMovieStore = create(
+  persist(
+    set => ({
+      historyList: [],
+      currentMovieId: "",
+      lastViewedMovieId: "",
 
-//     })
-//   )
-// )
+      setCurrentMovieId: currentMovieId => set({ currentMovieId }),
+      setLastViewedMovieId: lastViewedMovieId => set({ lastViewedMovieId }),
+      addToHistory: ({ imdbID, title }) =>
+        set(({ historyList }) => {
+          if (existsBy({ imdbID }, historyList)) {
+            return { historyList };
+          }
 
-// export default useMovieStore
+          return { historyList: [{ imdbID, title }, ...historyList] };
+        }),
+    }),
+    {
+      name: "movie-history-storage",
+    }
+  )
+);
+
+export default useMovieStore;
