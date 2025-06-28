@@ -1,99 +1,71 @@
 import React from "react";
 
-import { Modal as NeetoUIModal, Typography, Button, Tag } from "neetoui";
+import { useSingleMovieFetch } from "hooks/reactQuery/useMovieApi";
+import { Modal as NeetoUIModal, Typography, Tag } from "neetoui";
 
-const Modal = ({ isOpen, onClose }) => {
-  // The API data would be available here, assume `data` is fetched elsewhere in your code
-  const data = {
-    Title: "Spiderman",
-    Year: "1990",
-    Rated: "N/A",
-    Released: "N/A",
-    Runtime: "5 min",
-    Genre: "Short",
-    Director: "Christian Davi",
-    Writer: "N/A",
-    Actors: "N/A",
-    Plot: "N/A",
-    Language: "German",
-    Country: "Switzerland",
-    Awards: "N/A",
-    Poster: "N/A",
-    Ratings: [
-      {
-        Source: "Internet Movie Database",
-        Value: "5.6/10",
-      },
-    ],
-    Metascore: "N/A",
-    imdbRating: "5.6",
-    imdbVotes: "97",
-    imdbID: "tt0100669",
-    Type: "movie",
-    DVD: "N/A",
-    BoxOffice: "N/A",
-    Production: "N/A",
-    Website: "N/A",
-    Response: "True",
+import Loader from "./commons/Loader";
+
+const Modal = ({ isOpen, onClose, imdbID }) => {
+  const viewDetailsParams = {
+    apiKey: process.env.REACT_APP_OMDB_API_KEY,
+    i: imdbID,
   };
 
-  const genres = data.Genre?.split(",").map(g => g.trim()) || [];
+  // const queryRes = useSingleMovieFetch(viewDetailsParams);
+  const { data: response, isLoading } = useSingleMovieFetch(viewDetailsParams);
+  // console.log("Modal data:", response);
+  // console.log("React Query Results: ", queryRes);
+  const genres = response?.Genre?.split(",").map(g => g.trim()) || [];
 
   return (
     <NeetoUIModal isOpen={isOpen} size="large" onClose={onClose}>
-      <div className="space-y-4 p-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <Typography.Subheading className="text-xl font-semibold">
-              {data.Title}
-            </Typography.Subheading>
-            <div className="mt-2 flex gap-2">
-              {genres.map((genre, index) => (
-                <Tag key={index} label={genre} />
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div className="col-span-1">
-            {data.Poster && data.Poster !== "N/A" ? (
-              <img
-                alt={data.Title}
-                className="w-full rounded-lg shadow-md"
-                src={data.Poster}
-              />
-            ) : (
-              <div className="aspect-[2/3] flex w-full items-center justify-center rounded-lg bg-gray-200 text-sm text-gray-600">
-                No Image
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="space-y-4 p-6 ">
+          <div className="flex items-start justify-between">
+            <div>
+              <Typography className="pb-4 text-3xl font-semibold" style="h1">
+                {response.Title}
+              </Typography>
+              <div className="mt-2 flex gap-2">
+                {genres.map((genre, index) => (
+                  <Tag key={index} label={genre} />
+                ))}
               </div>
-            )}
+            </div>
           </div>
-          <div className="col-span-2 space-y-2">
-            <Typography.Paragraph className="italic">
-              {data.Plot !== "N/A" ? data.Plot : "No plot available."}
-            </Typography.Paragraph>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-              <Typography.Label>Director:</Typography.Label>
-              <span>{data.Director}</span>
-              <Typography.Label>Actors:</Typography.Label>
-              <span>{data.Actors}</span>
-              <Typography.Label>Box Office:</Typography.Label>
-              <span>{data.BoxOffice}</span>
-              <Typography.Label>Year:</Typography.Label>
-              <span>{data.Year}</span>
-              <Typography.Label>Runtime:</Typography.Label>
-              <span>{data.Runtime}</span>
-              <Typography.Label>Language:</Typography.Label>
-              <span>{data.Language}</span>
-              <Typography.Label>Rated:</Typography.Label>
-              <span>{data.Rated}</span>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="col-span-1">
+              {response.Poster && response.Poster !== "N/A" ? (
+                <img
+                  alt={response.Title}
+                  className="w-full rounded-lg shadow-md"
+                  src={response.Poster}
+                />
+              ) : (
+                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 text-sm text-gray-600">
+                  No Image
+                </div>
+              )}
+            </div>
+            <div className="col-span-2 space-y-2 px-12">
+              <Typography className="font-medium">
+                {response.Plot !== "N/A" ? response.Plot : "No plot available."}
+              </Typography>
+              <div className="flex flex-col gap-x-4 gap-y-1 text-sm">
+                <Typography>Director: {response.Director}</Typography>
+                <Typography>Actors: {response.Actors}</Typography>
+                <Typography>Box Office: {response.BoxOffice}</Typography>
+                <Typography>Year: {response.Year}</Typography>
+                <Typography>Runtime: {response.Runtime}</Typography>
+                <Typography>Language: {response.Language}</Typography>
+                <Typography>Rated: {response.Rated}</Typography>
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex justify-end pt-4">
-          <Button label="Close" style="secondary" onClick={onClose} />
-        </div>
-      </div>
+      )}
     </NeetoUIModal>
   );
 };

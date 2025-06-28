@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import movieApi from "apis/movieApi";
 import classNames from "classnames";
 import useDebounce from "components/hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input } from "neetoui";
+import { isNotNil } from "ramda";
+import { useQuery } from "react-query";
 
 import MovieListItem from "./MovieListItem";
 
 const MovieList = () => {
   const [searchKey, setSearchKey] = useState("");
-  const [movieList, setMovieList] = useState([]);
 
   const debouncedSearchKey = useDebounce(searchKey);
 
@@ -19,25 +20,20 @@ const MovieList = () => {
     s: debouncedSearchKey,
   };
 
-  const movieListQuery = async () => {
-    try {
-      const response = await movieApi.fetchMovieListBySearch(params);
-      console.log(response.data.Search);
-      setMovieList(() => response.data.Search);
-    } catch (error) {
-      console.error("Error fetching movie list:", error);
-    }
-  };
+  const { data: movieList } = useQuery({
+    queryKey: ["movieList", params.s],
+    queryFn: () => movieApi.fetchMovie(params),
+    enabled: !!debouncedSearchKey,
+    refetchOnWindowFocus: false,
+  });
 
-  useEffect(() => {
-    movieListQuery();
-  }, [debouncedSearchKey]);
+  // console.log("Movie List:", movieListQuery);
 
   return (
     <div
-      className={classNames("w-full bg-main-primary", {
-        "h-screen": !debouncedSearchKey,
-        "h-auto": debouncedSearchKey,
+      className={classNames("min-h-screen w-full bg-main-primary", {
+        "min-h-screen": !debouncedSearchKey,
+        "h-full": debouncedSearchKey,
       })}
     >
       <Input
@@ -49,14 +45,17 @@ const MovieList = () => {
         onChange={e => setSearchKey(e.target.value)}
       />
       <div className="m-16 grid justify-items-center gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {(movieList || []).map(({ Title, Poster, Year, imdbID }) => (
-          <MovieListItem
-            key={imdbID}
-            moviePoster={Poster}
-            movieTitle={Title}
-            year={Year}
-          />
-        ))}
+        {isNotNil(debouncedSearchKey) &&
+          movieList?.Search.map(({ Title, Poster, Year, imdbID, Type }) => (
+            <MovieListItem
+              imdbID={imdbID}
+              key={imdbID}
+              moviePoster={Poster}
+              movieTitle={Title}
+              type={Type}
+              year={Year}
+            />
+          ))}
       </div>
     </div>
   );
