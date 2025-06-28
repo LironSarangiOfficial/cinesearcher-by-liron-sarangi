@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const fetchOneMovie = id => axios.get("http://www.omdbapi.com/", { i: id });
-const fetchMovieList = params =>
+const fetchMovieListBySearch = params =>
   axios.get("http://www.omdbapi.com/", { params });
 
-export default { fetchOneMovie, fetchMovieList };
+export default { fetchOneMovie, fetchMovieListBySearch };

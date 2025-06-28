@@ -1,64 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
+import movieApi from "apis/movieApi";
+import classNames from "classnames";
+import useDebounce from "components/hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input } from "neetoui";
 
-const sampleResponse = {
-  Search: [
-    {
-      Title: "Dabang Sarkar",
-      Year: "2018",
-      imdbID: "tt8836572",
-      Type: "movie",
-      Poster:
-        "https://m.media-amazon.com/images/M/MV5BODY4MjE5MzQtOTZmNi00OTYwLWJkMGYtOGIxNDNmMGQ2OTQ5XkEyXkFqcGdeQXVyNTE3ODIxMDY@._V1_SX300.jpg",
-    },
-    {
-      Title: "Dabang Damaad",
-      Year: "2022",
-      imdbID: "tt32404383",
-      Type: "movie",
-      Poster:
-        "https://m.media-amazon.com/images/M/MV5BY2E3OWQ4MTQtMmVlNi00N2EzLWEzMTctNDE5MzY5ODBlMmZiXkEyXkFqcGdeQXVyOTA1MDQ3OTI@._V1_SX300.jpg",
-    },
-    {
-      Title: "The Lady Dabang",
-      Year: "2015",
-      imdbID: "tt5790352",
-      Type: "movie",
-      Poster:
-        "https://m.media-amazon.com/images/M/MV5BODJiYzQyNTgtYWVmMi00M2JmLWExYTctY2RiNGFhM2NjMjZiXkEyXkFqcGdeQXVyNjUyNzY2NTU@._V1_SX300.jpg",
-    },
-    {
-      Title: "Dabang 2 Pan Masala TVC Ft. Jimmy Shergill",
-      Year: "2014",
-      imdbID: "tt7318660",
-      Type: "movie",
-      Poster:
-        "https://m.media-amazon.com/images/M/MV5BN2Q3OTNlMzYtN2YzMC00ZjY0LThiMzQtODdmYmQ1N2NlMzhkXkEyXkFqcGdeQXVyNjA4NTk0NjU@._V1_SX300.jpg",
-    },
-  ],
-  totalResults: "4",
-  Response: "True",
-};
+import MovieListItem from "./MovieListItem";
 
 const MovieList = () => {
-  // const [searchKey, setSearchKey] = useState('');
-  console.log(sampleResponse);
-  // const params = {
-  //   apiKey: process.env.REACT_APP_OMDB_API_KEY,
-  //   s: searchKey,
-  // }
-  // const movies = movieApi.fetchMovieList(params);
+  const [searchKey, setSearchKey] = useState("");
+  const [movieList, setMovieList] = useState([]);
+
+  const debouncedSearchKey = useDebounce(searchKey);
+
+  const params = {
+    apiKey: process.env.REACT_APP_OMDB_API_KEY,
+    s: debouncedSearchKey,
+  };
+
+  const movieListQuery = async () => {
+    try {
+      const response = await movieApi.fetchMovieListBySearch(params);
+      console.log(response.data.Search);
+      setMovieList(() => response.data.Search);
+    } catch (error) {
+      console.error("Error fetching movie list:", error);
+    }
+  };
+
+  useEffect(() => {
+    movieListQuery();
+  }, [debouncedSearchKey]);
 
   return (
-    <div>
+    <div
+      className={classNames("w-full bg-main-primary", {
+        "h-screen": !debouncedSearchKey,
+        "h-auto": debouncedSearchKey,
+      })}
+    >
       <Input
-        className="w-full"
+        className="m-8 text-input-border-gray"
         placeholder="Search movies"
-        prefix={<Search />}
+        prefix={<Search color="#aaa" />}
         type="search"
+        value={searchKey}
+        onChange={e => setSearchKey(e.target.value)}
       />
+      <div className="m-16 grid justify-items-center gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        {(movieList || []).map(({ Title, Poster, Year, imdbID }) => (
+          <MovieListItem
+            key={imdbID}
+            moviePoster={Poster}
+            movieTitle={Title}
+            year={Year}
+          />
+        ))}
+      </div>
     </div>
   );
 };
