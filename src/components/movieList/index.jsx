@@ -1,3 +1,5 @@
+import { QUERY_KEYS } from "constants/query";
+
 import React, { useState } from "react";
 
 import movieApi from "apis/movieApi";
@@ -21,7 +23,7 @@ const MovieList = () => {
   };
 
   const { data: { Search: movieList = [] } = { Search: [] } } = useQuery({
-    queryKey: ["movieList", params.s],
+    queryKey: [QUERY_KEYS.MOVIES, params.s],
     queryFn: () => movieApi.fetchMovie(params),
     enabled: !!debouncedSearchKey,
     refetchOnWindowFocus: false,
