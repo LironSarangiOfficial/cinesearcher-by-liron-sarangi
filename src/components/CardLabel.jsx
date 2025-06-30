@@ -3,9 +3,9 @@ import React from "react";
 import { Typography } from "neetoui";
 
 const CardLabel = ({ label, value }) => (
-  <Typography style="p" weight="bold">
+  <Typography style="h4" weight="zbold">
     {label}
-    <span className="font-light">{value}</span>
+    <span className="text-sm font-light">{value}</span>
   </Typography>
 );
 

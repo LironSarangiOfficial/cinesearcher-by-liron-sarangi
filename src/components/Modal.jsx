@@ -36,8 +36,8 @@ const Modal = ({ isOpen, onClose, imdbID }) => {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="col-span-1">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div className="col-span-1 flex items-center justify-center">
               {response.Poster && response.Poster !== "N/A" ? (
                 <img
                   alt={response.Title}
@@ -50,11 +50,11 @@ const Modal = ({ isOpen, onClose, imdbID }) => {
                 </div>
               )}
             </div>
-            <div className="col-span-2 space-y-2 px-12">
-              <Typography className="font-medium">
+            <div className="col-span-2 space-y-4 pl-12">
+              <Typography className="mb-6 font-light italic">
                 {response.Plot !== "N/A" ? response.Plot : "No plot available."}
               </Typography>
-              <div className="flex flex-col gap-x-4 gap-y-1 text-sm">
+              <div className="flex flex-col gap-x-4 gap-y-2 text-sm">
                 <CardLabel label="Director: " value={response.Director} />
                 <CardLabel label="Actors: " value={response.Actors} />
                 <CardLabel label="Box Office: " value={response.BoxOffice} />
