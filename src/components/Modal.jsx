@@ -2,21 +2,22 @@ import React from "react";
 
 import { useSingleMovieFetch } from "hooks/reactQuery/useMovieApi";
 import { Modal as NeetoUIModal, Typography, Tag } from "neetoui";
+import { split, map, trim, pipe, defaultTo } from "ramda";
 
 import CardLabel from "./CardLabel";
 import Loader from "./commons/Loader";
 
 const Modal = ({ isOpen, onClose, imdbID }) => {
-  const viewDetailsParams = {
+  // const queryRes = useSingleMovieFetch(viewDetailsParams);
+  const { data: response, isLoading } = useSingleMovieFetch({
     apiKey: process.env.REACT_APP_OMDB_API_KEY,
     i: imdbID,
-  };
+  });
 
-  // const queryRes = useSingleMovieFetch(viewDetailsParams);
-  const { data: response, isLoading } = useSingleMovieFetch(viewDetailsParams);
   // console.log("Modal data:", response);
   // console.log("React Query Results: ", queryRes);
-  const genres = response?.Genre?.split(",").map(g => g.trim()) || [];
+
+  const genres = pipe(defaultTo(""), split(","), map(trim))(response?.Genre);
 
   return (
     <NeetoUIModal isOpen={isOpen} size="large" onClose={onClose}>

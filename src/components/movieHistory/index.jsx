@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-import { Delete } from "neetoicons";
+import { t } from "i18next";
+import { Button } from "neetoui";
 import { prop } from "ramda";
 import useMovieStore from "stores/useMovieStore";
 
@@ -19,14 +20,15 @@ const MovieHistoryList = () => {
   };
 
   return (
-    <div className="w-8/12 bg-main-primary">
+    <div className="m-auto max-h-screen w-8/12 overflow-auto bg-main-primary">
       <div className="neeto-ui-rounded neeto-ui-shadow-md neeto-ui-p-4 neeto-ui-h-full neeto-ui-w-64">
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row items-center justify-between px-4">
           <h2 className="neeto-ui-text-xl neeto-ui-font-bold neeto-ui-text-center neeto-ui-mb-4">
-            View history
+            {t("viewHistory")}
           </h2>
-          <Delete
-            className="absolute right-6 cursor-pointer"
+          <Button
+            label={t("clearLabel")}
+            style="danger-text"
             onClick={handleDelete}
           />
         </div>

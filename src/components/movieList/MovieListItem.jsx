@@ -9,12 +9,7 @@ import MoviePoster from "./MoviePoster";
 
 const MovieListItem = ({ imdbID, movieTitle, moviePoster, year, type }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  // console.log("MovieListItem props:", {
-  //   imdbID,
-  //   movieTitle,
-  //   moviePoster,
-  //   year,
-  // });
+
   const addToHistory = useMovieStore(store => store.addToHistory);
   const handleOnClose = () => {
     setIsModalVisible(false);

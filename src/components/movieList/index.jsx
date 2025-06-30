@@ -1,14 +1,11 @@
-import { QUERY_KEYS } from "constants/query";
+import React, { useEffect, useState } from "react";
 
-import React, { useState } from "react";
-
-import movieApi from "apis/movieApi";
 import classNames from "classnames";
 import useDebounce from "components/hooks/useDebounce";
+import { useMovieListFetch } from "hooks/reactQuery/useMovieApi";
 import { Search } from "neetoicons";
 import { Input } from "neetoui";
 import { isNotNil } from "ramda";
-import { useQuery } from "react-query";
 
 import MovieListItem from "./MovieListItem";
 
@@ -22,14 +19,12 @@ const MovieList = () => {
     s: debouncedSearchKey,
   };
 
-  const { data: { Search: movieList = [] } = { Search: [] } } = useQuery({
-    queryKey: [QUERY_KEYS.MOVIES, params.s],
-    queryFn: () => movieApi.fetchMovie(params),
-    enabled: !!debouncedSearchKey,
-    refetchOnWindowFocus: false,
-  });
-
-  // console.log("Movie List:", movieListQuery);
+  const { data: { Search: movieList = [] } = {} } = useMovieListFetch(params);
+  // const response = useMovieListFetch(params)
+  // if (!isLoading) console.log(totalResults);
+  useEffect(() => {
+    console.log(movieList);
+  }, [debouncedSearchKey]);
 
   return (
     <div

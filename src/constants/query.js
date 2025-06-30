@@ -1,3 +1,4 @@
 export const QUERY_KEYS = {
-  MOVIES: "movies",
+  MOVIES: "movieList",
+  MODAL: "singleMovie",
 };
