@@ -20,7 +20,7 @@ const MovieHistoryList = () => {
 
   return (
     <div className="w-8/12 bg-main-primary">
-      <div className="neeto-ui-bg-white neeto-ui-rounded neeto-ui-shadow-md neeto-ui-p-4 neeto-ui-h-full neeto-ui-w-64">
+      <div className="neeto-ui-rounded neeto-ui-shadow-md neeto-ui-p-4 neeto-ui-h-full neeto-ui-w-64">
         <div className="flex flex-row justify-center">
           <h2 className="neeto-ui-text-xl neeto-ui-font-bold neeto-ui-text-center neeto-ui-mb-4">
             View history
