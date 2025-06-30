@@ -3,6 +3,7 @@ import React from "react";
 import { useSingleMovieFetch } from "hooks/reactQuery/useMovieApi";
 import { Modal as NeetoUIModal, Typography, Tag } from "neetoui";
 
+import CardLabel from "./CardLabel";
 import Loader from "./commons/Loader";
 
 const Modal = ({ isOpen, onClose, imdbID }) => {
@@ -54,13 +55,13 @@ const Modal = ({ isOpen, onClose, imdbID }) => {
                 {response.Plot !== "N/A" ? response.Plot : "No plot available."}
               </Typography>
               <div className="flex flex-col gap-x-4 gap-y-1 text-sm">
-                <Typography>Director: {response.Director}</Typography>
-                <Typography>Actors: {response.Actors}</Typography>
-                <Typography>Box Office: {response.BoxOffice}</Typography>
-                <Typography>Year: {response.Year}</Typography>
-                <Typography>Runtime: {response.Runtime}</Typography>
-                <Typography>Language: {response.Language}</Typography>
-                <Typography>Rated: {response.Rated}</Typography>
+                <CardLabel label="Director: " value={response.Director} />
+                <CardLabel label="Actors: " value={response.Actors} />
+                <CardLabel label="Box Office: " value={response.BoxOffice} />
+                <CardLabel label="Year: " value={response.Year} />
+                <CardLabel label="Runtime: " value={response.Runtime} />
+                <CardLabel label="Language: " value={response.Language} />
+                <CardLabel label="Rated: " value={response.Rated} />
               </div>
             </div>
           </div>
