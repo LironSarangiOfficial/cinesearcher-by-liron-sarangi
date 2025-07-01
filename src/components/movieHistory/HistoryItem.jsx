@@ -1,23 +1,11 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-import classNames from "classnames";
+const HistoryItemComponent = ({ title, historyItemClasses }, ref) => (
+  <div className={historyItemClasses} ref={ref}>
+    {title}
+  </div>
+);
 
-const HistoryItem = ({ title, isActive, onClick }) => {
-  console.log(" movie history item Props: ", title);
-
-  return (
-    <div
-      className={classNames(
-        "neeto-ui-rounded neeto-ui-text-black my-2 cursor-pointer bg-history-item-inactive py-2 text-center",
-        {
-          "neeto-ui-text-white bg-history-item-active": isActive,
-        }
-      )}
-      onClick={onClick}
-    >
-      {title}
-    </div>
-  );
-};
+const HistoryItem = forwardRef(HistoryItemComponent);
 
 export default HistoryItem;

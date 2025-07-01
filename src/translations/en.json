@@ -1,0 +1,13 @@
+{
+  "history": {
+    "viewHistory": "View history",
+    "noHistory": "No history is available",
+    "deleteItem": "You're about to delete {{movieTitle}}. This change is irreversible. Are you sure you want to delete",
+    "clearAllHistory": ""
+  },
+  "movie": {
+    "viewDetails": "View details",
+    "notFound": "Movie not found"
+  },
+  "clearLabel": "Clear all"
+}

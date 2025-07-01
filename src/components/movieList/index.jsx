@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
-import movieApi from "apis/movieApi";
 import classNames from "classnames";
+import Loader from "components/commons/Loader";
 import useDebounce from "components/hooks/useDebounce";
+import { useMovieListFetch } from "hooks/reactQuery/useMovieApi";
 import { Search } from "neetoicons";
 import { Input } from "neetoui";
 import { isNotNil } from "ramda";
-import { useQuery } from "react-query";
 
 import MovieListItem from "./MovieListItem";
 
@@ -20,43 +20,45 @@ const MovieList = () => {
     s: debouncedSearchKey,
   };
 
-  const { data: { Search: movieList = [] } = { Search: [] } } = useQuery({
-    queryKey: ["movieList", params.s],
-    queryFn: () => movieApi.fetchMovie(params),
-    enabled: !!debouncedSearchKey,
-    refetchOnWindowFocus: false,
-  });
-
-  // console.log("Movie List:", movieListQuery);
+  const { data: { Search: movieList = [] } = {}, isLoading } =
+    useMovieListFetch(params);
 
   return (
     <div
-      className={classNames("min-h-screen w-full bg-main-primary", {
+      className={classNames("w-full bg-main-primary", {
         "min-h-screen": !debouncedSearchKey,
         "h-full": debouncedSearchKey,
       })}
     >
-      <Input
-        className="m-8 text-input-border-gray"
-        placeholder="Search movies"
-        prefix={<Search color="#aaa" />}
-        type="search"
-        value={searchKey}
-        onChange={e => setSearchKey(e.target.value)}
-      />
-      <div className="m-16 grid justify-items-center gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {isNotNil(debouncedSearchKey) &&
-          movieList?.map(({ Title, Poster, Year, imdbID, Type }) => (
-            <MovieListItem
-              imdbID={imdbID}
-              key={imdbID}
-              moviePoster={Poster}
-              movieTitle={Title}
-              type={Type}
-              year={Year}
-            />
-          ))}
+      <div id="searchBox">
+        <Input
+          className="m-8 text-input-border-gray"
+          placeholder="Search movies"
+          prefix={<Search color="#aaa" />}
+          type="search"
+          value={searchKey}
+          onChange={e => setSearchKey(e.target.value)}
+        />
       </div>
+      {isLoading ? (
+        <div className="mt-10 flex h-96 items-center justify-center">
+          <Loader />
+        </div>
+      ) : (
+        <div className="m-16 grid justify-items-center gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+          {isNotNil(debouncedSearchKey) &&
+            movieList?.map(({ Title, Poster, Year, imdbID, Type }) => (
+              <MovieListItem
+                imdbID={imdbID}
+                key={imdbID}
+                moviePoster={Poster}
+                movieTitle={Title}
+                type={Type}
+                year={Year}
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 };

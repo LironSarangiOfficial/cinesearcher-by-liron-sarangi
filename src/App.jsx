@@ -8,7 +8,7 @@ import "./App.css";
 // eslint-disable-next-line import/extensions
 
 const App = () => (
-  <div className="app bg-gray-100">
+  <div className="app">
     <Switch>
       <Route exact component={MainPage} path={routes.root} />
       <Route exact component={NotFound} path="*" />

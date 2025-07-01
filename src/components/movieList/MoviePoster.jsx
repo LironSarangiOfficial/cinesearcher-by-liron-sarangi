@@ -3,7 +3,7 @@ import React from "react";
 
 const MoviePoster = ({ imgLink }) => (
   <div className="flex h-full items-center">
-    <img alt="Movie Poster" className="mx-auto mb-6 w-24" src={imgLink} />
+    <img alt="Movie Poster" className="mx-auto mb-4 w-24" src={imgLink} />
   </div>
 );
 

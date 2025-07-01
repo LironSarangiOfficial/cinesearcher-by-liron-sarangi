@@ -19,6 +19,7 @@ const useMovieStore = create(
 
           return { historyList: [{ imdbID, title }, ...historyList] };
         }),
+      clearHistory: () => set(() => ({ historyList: [] })),
     }),
     {
       name: "movie-history-storage",
