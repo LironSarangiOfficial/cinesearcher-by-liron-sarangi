@@ -22,7 +22,9 @@ const Modal = ({ isOpen, onClose, imdbID }) => {
   return (
     <NeetoUIModal isOpen={isOpen} size="large" onClose={onClose}>
       {isLoading ? (
-        <Loader />
+        <div className="flex-justify-center items-center space-y-4 p-6">
+          <Loader />
+        </div>
       ) : (
         <div className="space-y-4 p-6 ">
           <div className="flex items-start justify-between">

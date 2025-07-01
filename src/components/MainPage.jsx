@@ -4,7 +4,7 @@ import MovieHistoryList from "./movieHistory";
 import MovieList from "./movieList";
 
 const MainPage = () => (
-  <div className="flex flex-row">
+  <div className="flex h-screen flex-row">
     <MovieList />
     <MovieHistoryList />
   </div>

@@ -2,8 +2,6 @@ import React from "react";
 
 import { Spinner } from "@bigbinary/neetoui";
 
-const Loader = () => (
-  <Spinner className="absolute left-1/2 top-1/2" size="large" strokeWidth={2} />
-);
+const Loader = () => <Spinner size="large" strokeWidth={2} />;
 
 export default Loader;
